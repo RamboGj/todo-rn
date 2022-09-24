@@ -8,9 +8,29 @@ import { useState } from 'react'
 export function TodoList() {
   const [todos, setTodos] = useState<string[]>([])
   const [todoDescription, setTodoDescription] = useState<string>('')
+  const [createdTodosCount, setCreatedTodosCount]= useState<number>(0)
+  const [doneTodosCount, setDoneTodosCount]= useState<number>(0)
 
   function handleCreateTodo() {
     setTodos(prevState => [...prevState, todoDescription])
+    setCreatedTodosCount(prevState => prevState + 1)
+  }
+
+  function onCheckTodo(isChecked: boolean) {
+    if (isChecked) {
+      setDoneTodosCount(prevState => prevState - 1)
+    } else {
+      setDoneTodosCount(prevState => prevState + 1)
+    }
+  }
+
+  function onRemoveTodo(description: string) {
+    const todosWithoutRemoved = todos.filter(todo => {
+      return todo !== description
+    })
+
+    setTodos(todosWithoutRemoved)
+    setCreatedTodosCount(prevState => prevState - 1)
   }
 
   return (
@@ -31,12 +51,28 @@ export function TodoList() {
     </View>
       <View style={styles.headerContainer}>
         <View style={styles.headerText}>
-          <Text style={styles.createdText}>Criadas</Text>
-          <Text style={styles.numberBox}>0</Text>
+          <Text 
+            style={styles.createdText}
+          >
+            Criadas
+          </Text>
+          <Text 
+            style={styles.numberBox}
+          >
+            {createdTodosCount}
+          </Text>
         </View>
         <View style={styles.headerText}>
-          <Text style={styles.doneText}>Concluídas</Text>
-          <Text style={styles.numberBox}>0</Text>
+          <Text 
+            style={styles.doneText}
+          >
+            Concluídas
+          </Text>
+          <Text 
+            style={styles.numberBox}
+          >
+            {doneTodosCount}
+          </Text>
         </View>
       </View>
       
@@ -48,7 +84,11 @@ export function TodoList() {
             data={todos}
             keyExtractor={item => item}
             renderItem={item => (
-              <TodoItem description={item.item} />
+              <TodoItem 
+                description={item.item}
+                onCheck={onCheckTodo}
+                onRemove={() => onRemoveTodo(item.item)} 
+              />
             )}
           />
         ) : (

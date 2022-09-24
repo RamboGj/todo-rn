@@ -21,8 +21,10 @@ export const styles = StyleSheet.create({
   },
   isSelectedTodoDescription: {
     color: '#7F7F7F',
+    textDecorationLine: 'line-through',
     marginHorizontal: 8,
-    maxWidth: '75%',
-    textDecorationLine: 'line-through'
+    maxWidth: '60%',
+    width: '100%',
+    justifyContent: 'flex-start'
   }
 })
